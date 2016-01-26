@@ -86,7 +86,7 @@ Dog.prototype.barkName = function(){
   var bark = "Woof! My name is " + this.name;
   console.log(bark);
   return bark;
-}
+};
 ```
 
 Now, if we call `fido.barkName()`:
@@ -103,7 +103,7 @@ We can add one more function to our dog to demonstrate writing:
 Dog.prototype.rename = function(newName){
   this.name = newName;
   return this;
-}
+};
 ```
 
 ```
@@ -111,10 +111,85 @@ Dog.prototype.rename = function(newName){
     < Dog {name: "Buddy", color: "brown", breed: "German Shepherd"}
 ```
 
-## Code Exercise (10 min)
+## Code Exercise (10 min + 10 min review)
+
+Write a prototype `Student` with `name`, `hometown`, and `placesLived` attributes. `placesLived` should start as an array with only the current hometown – so you don't need to pass `placesLived` into the constructor function. Write function `move(newHometown)` that changes the `hometown` attribute to `newHometown` and adds `newHometown` to the `placesLived` array.
+
+Solution:
+```
+function Student(name, hometown){
+  this.name = name;
+  this.hometown = hometown;
+  this.placesLived = [hometown];
+}
+
+Student.prototype.move = function(newHometown){
+  this.hometown = newHometown;
+  this.placesLived.push(newHometown);
+  return this;
+};
+```
 
 ## Second Prototype - Codealong (15 min)
 
-## Code Exercise (10 min)
+Prototypes can also take in and modify different kinds of objects. Let's write an `Owner` prototype that has a `Dog` as a property:
+
+```
+function Owner(name, dog){
+  this.name = name;
+  this.dog = dog;
+}
+```
+
+We can create a new owner by passing in a string `name` and a `Dog` `dog`:
+
+```
+var fido = new Dog("Fido", "brown", "German Shepherd");
+var sean = new Owner("Sean", fido);
+```
+
+If we want to allow Sean to rename Fido, we'll have to write a `renameDog` function for an owner:
+
+```
+Owner.prototype.renameDog = function(newName){
+  this.dog.rename(newName);
+  return this.dog;
+};
+```
+
+```
+> sean.renameDog("Buddy");
+    < Dog {name: "Buddy", color: "brown", breed: "German Shepherd"}
+> sean.dog
+    < Dog {name: "Buddy", color: "brown", breed: "German Shepherd"}
+```
+
+## Code Exercise (10 min + 10 min review)
+
+Write a Cohort prototype that takes in a name property and has many Students. Write a function addStudent(newStudent) that associates a Student object with the Cohort. BONUS: Add a property cohort to the Student prototype. When addStudent is called, set the cohort property on newStudent.
+
+Solution:
+```
+function Student(name, hometown){
+  this.name = name;
+  this.hometown = hometown;
+  this.placesLived = [hometown];
+  this.cohort = null;
+}
+
+function Cohort(name){
+  this.name = name;
+  this.students = [];
+}
+
+Cohort.prototype.addStudent = function(newStudent){
+  this.students.push(newStudent);
+  newStudent.cohort = this;
+  return this;
+};
+```
 
 ## Conclusion (5 min)
+
+- Reemphasize the importance of organization with prototypes and constructors
+- How might we use this in the DOM?
